@@ -333,13 +333,6 @@ For production deployment supporting 10,000+ users, see [DEPLOYMENT.md](DEPLOYME
 - Non-root Docker containers
 - Security headers in production
 
-**Important:** Change default admin credentials before deploying to production!
-
-## Default Credentials
-
-**Admin Login (Development Only):**
-- Username: `admin`
-- Password: `admin123`
 
 ⚠️ **These must be changed in production!**
 
