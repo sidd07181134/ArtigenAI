@@ -242,5 +242,17 @@ export const dashboardAPI = {
   },
 };
 
+// Media Transcription API
+export const mediaAPI = {
+  transcribeYouTube: async (url: string) => {
+    const response = await apiClient.post('/media/youtube/transcribe', { url });
+    return response.data;
+  },
+  getHealth: async () => {
+    const response = await apiClient.get('/media/health');
+    return response.data;
+  },
+};
+
 export default apiClient;
 

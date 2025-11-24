@@ -13,6 +13,7 @@ import { DashboardOrigins } from './pages/Admin/Dashboard/Origins';
 import { DashboardJobs } from './pages/Admin/Dashboard/Jobs';
 import { DashboardDocuments } from './pages/Admin/Dashboard/Documents';
 import { DashboardSettings } from './pages/Admin/Dashboard/Settings';
+import { MediaTranscription } from './pages/Admin/Dashboard/MediaTranscription';
 import { Sidebar } from './components/Navigation';
 import './index.css';
 
@@ -51,6 +52,7 @@ const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     { label: 'Origins', path: '/admin/dashboard/origins' },
     { label: 'Jobs', path: '/admin/dashboard/jobs' },
     { label: 'Documents', path: '/admin/dashboard/documents' },
+    { label: 'Media Transcription', path: '/admin/dashboard/media-transcription' },
     { label: 'Settings', path: '/admin/dashboard/settings' },
     { label: 'Legacy Dashboard', path: '/admin/dashboard' },
     { label: 'Health', path: '/admin/health' },
@@ -137,6 +139,16 @@ function App() {
                 <ProtectedRoute>
                   <AdminLayout>
                     <DashboardSettings />
+                  </AdminLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/dashboard/media-transcription"
+              element={
+                <ProtectedRoute>
+                  <AdminLayout>
+                    <MediaTranscription />
                   </AdminLayout>
                 </ProtectedRoute>
               }
