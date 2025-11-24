@@ -39,7 +39,7 @@ app.add_middleware(
 )
 
 # Import routers
-from app.api import auth, content, search, admin, crawl, dashboard
+from app.api import auth, content, search, admin, crawl, dashboard, media_transcription
 
 app.include_router(auth.router, prefix="/api/auth", tags=["auth"])
 app.include_router(content.router, prefix="/api/content", tags=["content"])
@@ -47,6 +47,7 @@ app.include_router(search.router, prefix="/api/search", tags=["search"])
 app.include_router(admin.router, prefix="/api/admin", tags=["admin"])
 app.include_router(crawl.router, prefix="/api/crawl", tags=["crawl"])
 app.include_router(dashboard.router, prefix="/api/admin/dashboard", tags=["dashboard"])
+app.include_router(media_transcription.router, tags=["media-transcription"])
 
 # Serve static files (frontend) if they exist
 # This is used in production when frontend is built into the container
@@ -80,6 +81,14 @@ if os.path.exists(static_dir):
 @app.on_event("startup")
 async def startup_event():
     """Initialize scheduler on application startup"""
+    # Log registered routes for debugging
+    import logging
+    logger = logging.getLogger(__name__)
+    media_routes = [r.path for r in app.routes if hasattr(r, 'path') and 'media' in r.path]
+    if media_routes:
+        logger.info(f"Media transcription routes registered: {media_routes}")
+    else:
+        logger.warning("No media transcription routes found - check router registration")
     # Verify event loop policy and type are correct on Windows
     if sys.platform.startswith("win"):
         import asyncio

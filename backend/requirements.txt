@@ -27,4 +27,5 @@ slowapi>=0.1.9
 spacy>=3.7.0
 # Note: After installing spacy, download the English model:
 # python -m spacy download en_core_web_md
+yt-dlp>=2024.1.0  # For YouTube audio download for transcription
 

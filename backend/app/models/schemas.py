@@ -1,5 +1,5 @@
 from pydantic import BaseModel, EmailStr
-from typing import Optional, List, Dict
+from typing import Optional, List, Dict, Any
 from datetime import datetime
 from app.models.database import UserRole
 
@@ -318,4 +318,22 @@ class SettingsUpdate(BaseModel):
     realtime_web: Optional[Dict] = None
     rag: Optional[Dict] = None
     data_retention: Optional[Dict] = None
+
+
+# Media Transcription schemas
+class YouTubeTranscriptionRequest(BaseModel):
+    url: str  # YouTube URL
+
+
+class YouTubeTranscriptionResponse(BaseModel):
+    success: bool
+    message: str
+    preview: Optional[str] = None
+    tokens_ingested: Optional[int] = None
+
+
+class MediaHealthResponse(BaseModel):
+    groq_api: Dict[str, Any]  # {"status": "ok"|"error", "message": str}
+    qdrant: Dict[str, Any]  # {"status": "ok"|"error", "message": str, "connected": bool, "collections_count": int}
+    overall_status: str  # "healthy"|"degraded"|"unhealthy"
 
