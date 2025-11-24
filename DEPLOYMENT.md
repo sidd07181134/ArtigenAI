@@ -55,10 +55,9 @@ Copy the JSON output and paste it as the `AZURE_CREDENTIALS` secret.
 
 #### 2. AZURE_WEBAPP_NAME
 
-The name of your Azure Web App resource (e.g., `aigov-webapp-prod`).
+The name of your Azure Web App resource: `artigenapp`
 
-**To find your Web App name:**
-- Azure Portal → App Services → Your Web App → Overview → Name
+**Note**: This is already configured in the workflow. If you need to change it, update the `AZURE_WEBAPP_NAME` environment variable in `.github/workflows/azure-webapp-deploy.yml`.
 
 #### 3. GITHUB_TOKEN (Automatic)
 
@@ -68,23 +67,26 @@ This is automatically provided by GitHub Actions. No manual configuration needed
 
 #### 1. Create Azure Web App
 
+**Note**: Your Azure Web App `artigenapp` is already created. If you need to recreate it:
+
 ```bash
 # Create resource group (if not exists)
-az group create --name aigov-rg --location eastus
+az group create --name aigov-group --location westeurope
 
 # Create App Service Plan
 az appservice plan create \
-  --name aigov-plan \
-  --resource-group aigov-rg \
+  --name ASP-aigovgroup-9e44 \
+  --resource-group aigov-group \
   --sku B1 \
-  --is-linux
+  --is-linux \
+  --location westeurope
 
 # Create Web App for Containers
 az webapp create \
-  --name aigov-webapp-prod \
-  --resource-group aigov-rg \
-  --plan aigov-plan \
-  --deployment-container-image-name ghcr.io/OWNER/REPO/aigov-app:latest
+  --name artigenapp \
+  --resource-group aigov-group \
+  --plan ASP-aigovgroup-9e44 \
+  --deployment-container-image-name ghcr.io/sidd07181134/artigenai/aigov-app:latest
 ```
 
 #### 2. Configure Environment Variables

@@ -10,8 +10,14 @@ WORKDIR /app/frontend
 COPY frontend/package*.json ./
 RUN npm ci --only=production=false
 
-# Copy frontend source and build
+# Copy frontend source
 COPY frontend/ ./
+
+# Run tests before building (fail build if tests fail)
+# Note: Tests are required to pass before deployment
+RUN npm run test -- --run
+
+# Build the frontend
 RUN npm run build
 
 # Stage 2: Python dependencies builder

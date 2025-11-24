@@ -142,28 +142,36 @@ The AI Governance Literacy Platform provides an intelligent question-answering s
    ```bash
    cp backend/.env.example backend/.env
    # Edit backend/.env with your API keys and configuration
+   # IMPORTANT: Set QDRANT_URL to your Qdrant Cloud URL (not local)
    ```
 
-3. **Start all services:**
+3. **Set Qdrant Cloud URL** (required):
+   ```bash
+   # In backend/.env, set:
+   QDRANT_URL=https://your-cluster-id.qdrant.io
+   QDRANT_API_KEY=your-api-key  # If required by your cluster
+   ```
+
+4. **Start all services:**
    ```bash
    docker-compose up -d
    ```
+   **Note**: This starts backend and frontend only. Qdrant Cloud is used (not local).
 
-4. **Initialize the database:**
+5. **Initialize the database:**
    ```bash
    docker-compose exec backend python scripts/init_db.py
    ```
 
-5. **Seed initial documents:**
+6. **Seed initial documents:**
    ```bash
    docker-compose exec backend python scripts/seed_documents.py
    ```
 
-6. **Access the application:**
+7. **Access the application:**
    - Frontend: http://localhost
    - Backend API: http://localhost:8000
    - API Documentation: http://localhost:8000/docs
-   - Qdrant Dashboard: http://localhost:6333/dashboard
 
 ## Environment Configuration
 
@@ -172,8 +180,8 @@ Create a `.env` file in the `backend/` directory based on `.env.example`. Requir
 ### Required Variables
 - `SECRET_KEY` - JWT signing key (generate with: `openssl rand -hex 32`)
 - `GROQ_API_KEY` - Groq API key for answer generation
-- `QDRANT_URL` - Qdrant vector database URL
-- `QDRANT_API_KEY` - Qdrant API key (if using Qdrant Cloud)
+- `QDRANT_URL` - Qdrant Cloud URL (e.g., `https://your-cluster-id.qdrant.io`)
+- `QDRANT_API_KEY` - Qdrant Cloud API key (required for Qdrant Cloud)
 
 ### Optional Variables
 - `DATABASE_URL` - Database connection string (default: SQLite)

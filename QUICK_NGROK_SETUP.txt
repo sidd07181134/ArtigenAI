@@ -1,0 +1,40 @@
+========================================
+  QUICK NGROK SETUP - DO THIS NOW
+========================================
+
+STEP 1: Get Your Real ngrok Authtoken
+--------------------------------------
+1. Open browser: https://dashboard.ngrok.com/get-started/your-authtoken
+2. Sign up/login (FREE account)
+3. Copy your authtoken (long string like: 2abc123def456ghi789...)
+
+STEP 2: Authenticate ngrok
+--------------------------
+Run this command (replace YOUR_REAL_TOKEN with the token you copied):
+
+C:\Users\immer\AppData\Local\Temp\ngrok\ngrok.exe config add-authtoken YOUR_REAL_TOKEN
+
+STEP 3: Start ngrok Tunnel
+---------------------------
+Run this command:
+
+C:\Users\immer\AppData\Local\Temp\ngrok\ngrok.exe http 5173
+
+STEP 4: Get Your Public URL
+----------------------------
+After running step 3, you'll see output like:
+
+Forwarding    https://abc123.ngrok-free.app -> http://localhost:5173
+
+YOUR PUBLIC URL IS: https://abc123.ngrok-free.app
+
+========================================
+  CURRENT STATUS
+========================================
+
+✅ Frontend: http://localhost:5173 (RUNNING)
+✅ Backend:  http://localhost:8000 (RUNNING)
+⏳ ngrok: Needs real authtoken (see steps above)
+
+========================================
+

@@ -3,11 +3,15 @@ name: Deploy to Azure Web App
 # This workflow deploys the application to Azure Web App Service (App Service for Containers)
 # It builds a Docker image containing both backend and frontend, pushes it to GitHub Container Registry,
 # and deploys it to Azure Web App for Containers.
+#
+# Required GitHub Secrets:
+# - AZURE_CREDENTIALS: Azure service principal JSON
+# - AZURE_WEBAPP_NAME: artigenapp
 
 on:
   push:
     branches:
-      - Version-0.1  # Change this to your main branch name if different
+      - Version-0.1
   workflow_dispatch:  # Allow manual triggering
 
 env:
@@ -15,6 +19,8 @@ env:
   REGISTRY: ghcr.io
   # Image name (will be: ghcr.io/OWNER/IMAGE_NAME)
   IMAGE_NAME: ${{ github.repository }}/aigov-app
+  # Azure Web App name
+  AZURE_WEBAPP_NAME: artigenapp
 
 jobs:
   build-and-deploy:
@@ -26,6 +32,22 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install frontend dependencies
+        working-directory: ./frontend
+        run: npm ci
+
+      - name: Run frontend tests
+        working-directory: ./frontend
+        run: npm run test -- --run
+        continue-on-error: false
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -43,9 +65,8 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=ref,event=branch
-            type=sha,prefix={{branch}}-
-            type=raw,value=latest,enable={{is_default_branch}}
+            type=sha,prefix=
+            type=raw,value=latest
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
@@ -75,8 +96,8 @@ jobs:
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
-          app-name: ${{ secrets.AZURE_WEBAPP_NAME }}
-          # AZURE_WEBAPP_NAME secret should be the name of your Azure Web App resource
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
-          # Use the commit SHA as the image tag for precise versioning
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          # Azure Web App name: artigenapp
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+          # Use latest tag for Azure deployment
 
