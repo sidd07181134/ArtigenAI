@@ -5,11 +5,18 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   server: {
-    host: '0.0.0.0', // Allow network access
+    host: true, // Allow external network access (required for ngrok)
     port: 5173,
     // Ensure SPA routing works - serve index.html for all routes
     // This is the default behavior in Vite, but explicitly configured for clarity
     strictPort: false,
+    // Allow ngrok and other external hosts
+    allowedHosts: [
+      '.ngrok-free.dev',
+      '.ngrok.io',
+      '.ngrok.app',
+      'localhost',
+    ],
     proxy: {
       '/api': {
         target: 'http://localhost:8000',
